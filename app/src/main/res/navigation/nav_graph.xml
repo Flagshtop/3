@@ -30,12 +30,12 @@
         android:name="com.example.myapplication.fragments.EditNoteFragment"
         android:label="fragment_edit_note"
         tools:layout="@layout/fragment_edit_note" >
-        <action
-            android:id="@+id/action_editNoteFragment_to_homeFragment"
-            app:destination="@id/LettersFragment" />
-        <argument
-            android:name="note"
-            app:argType="com.example.notesroompractice.model.Note"
-            app:nullable="true" />
+<!--        <action-->
+<!--            android:id="@+id/action_editNoteFragment_to_homeFragment"-->
+<!--            app:destination="@id/LettersFragment" />-->
+<!--        <argument-->
+<!--            android:name="note"-->
+<!--            app:argType="com.example.myapplication.model.Note"-->
+<!--            app:nullable="true" />-->
     </fragment>
 </navigation>

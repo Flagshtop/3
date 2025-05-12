@@ -31,21 +31,28 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(HomeFragment())
                     true
 
-                }R.id.bottom_letter -> {
-                replaceFragment(LettersFragment())
-                true
+                }
 
-            }R.id.bottom_learn -> {
-                replaceFragment(LearnFragment())
-                true
+                R.id.bottom_letter -> {
+                    replaceFragment(LettersFragment())
+                    true
 
-            }
-            else -> false
+                }
+
+                R.id.bottom_learn -> {
+                    replaceFragment(LearnFragment())
+                    true
+
+                }
+
+                else -> false
 
             }
         }
-replaceFragment(HomeFragment())
+        replaceFragment(HomeFragment())
     }
+
     private fun replaceFragment(fragment: androidx.fragment.app.Fragment) {
         supportFragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit()
-    } }
+    }
+}
