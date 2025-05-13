@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.os.Bundle
+import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.database.NoteDatabase
@@ -16,15 +17,8 @@ import androidx.lifecycle.ViewModel
 
 class MainActivity : AppCompatActivity() {
 
-
     private lateinit var bottomNavigationView: BottomNavigationView
     lateinit var noteViewModel: NoteViewModel
-
-
-
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +28,11 @@ class MainActivity : AppCompatActivity() {
         //   val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
         //  v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
         //  insets
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+
         setupViewModel()
 
         bottomNavigationView = findViewById(R.id.bottom_navigation)
