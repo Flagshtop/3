@@ -2,15 +2,28 @@ package com.example.myapplication
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.example.myapplication.database.NoteDatabase
 import com.example.myapplication.fragments.HomeFragment
 import com.example.myapplication.fragments.LearnFragment
 import com.example.myapplication.fragments.LettersFragment
+import com.example.myapplication.repository.NoteRepository
+import com.example.myapplication.viewmodel.NoteViewModel
+import com.example.myapplication.viewmodel.NoteViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.lifecycle.ViewModel
+
 
 class MainActivity : AppCompatActivity() {
 
 
     private lateinit var bottomNavigationView: BottomNavigationView
+    lateinit var noteViewModel: NoteViewModel
+
+
+
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         //   val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
         //  v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
         //  insets
-
+        setupViewModel()
 
         bottomNavigationView = findViewById(R.id.bottom_navigation)
 
@@ -52,7 +65,16 @@ class MainActivity : AppCompatActivity() {
         replaceFragment(HomeFragment())
     }
 
+    private fun setupViewModel(){
+        val noteRepository =  NoteRepository(NoteDatabase(this))
+        val viewModelProviderFactory = NoteViewModelFactory(application, noteRepository)
+        noteViewModel = ViewModelProvider(this, viewModelProviderFactory)[NoteViewModel::class.java]
+
+    }
+
     private fun replaceFragment(fragment: androidx.fragment.app.Fragment) {
         supportFragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit()
     }
+
+
 }
