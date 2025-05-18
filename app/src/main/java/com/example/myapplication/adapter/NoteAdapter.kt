@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.NoteLayoutBinding
 import com.example.myapplication.fragments.HomeFragment
+import com.example.myapplication.fragments.MainLetterFragment
+import com.example.myapplication.fragments.MainLetterFragmentDirections
 import com.example.myapplication.model.Note
 
 class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>(){
@@ -33,15 +35,21 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>(){
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
+    private var onItemClickListener: ((Note) -> Unit)? = null
 
+    fun setOnItemClickListener(listener: (Note) -> Unit) {
+        onItemClickListener = listener
+    }
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
          val currentNote = differ.currentList[position]
-
+        holder.itemView.setOnClickListener {
+            onItemClickListener?.invoke(currentNote)
+        }
         holder.itemBinding.noteTitle.text = currentNote.noteTittle
         holder.itemBinding.noteDesc.text = currentNote.noteDesc
 
         holder.itemView.setOnClickListener{
-          //  val direction = HomeFragmentDirections.actionHomeFragmentToEditNoteFragment(currentNote)
+          val direction = MainLetterFragmentDirections.actionHomeFragmentToEditNoteFragment(currentNote)
         }
     }
 }

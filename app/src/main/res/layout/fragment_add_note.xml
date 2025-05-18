@@ -14,24 +14,6 @@
         tools:context=".NewNoteFragment"
         android:padding="12dp">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="119dp"
-            android:layout_height="43dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="660dp"
-            android:background="@color/purple"
-            app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
-            app:itemIconTint="@color/white"
-            app:itemTextColor="@color/white"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="parent"
-            app:menu="@menu/menu_add_note" />
-
         <TextView
             android:id="@+id/addNoteHeading"
             android:layout_width="wrap_content"
@@ -65,6 +47,20 @@
             android:hint="Enter the description"
             android:padding="12dp"
             android:textSize="18sp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="37dp"
+            android:layout_marginBottom="166dp"
+            android:backgroundTint="@color/purple"
+            android:clickable="true"
+            android:contentDescription="editFab"
+            android:src="@drawable/baseline_done_24"
+            android:tintMode="@color/white" />
     </RelativeLayout>
 
 </layout>

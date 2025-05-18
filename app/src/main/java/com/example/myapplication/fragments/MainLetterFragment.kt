@@ -1,5 +1,6 @@
 package com.example.myapplication.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -28,7 +29,6 @@ class MainLetterFragment : Fragment(R.layout.fragment_main_letter), SearchView.O
 
     private lateinit var notesViewModel : NoteViewModel
     private lateinit var noteAdapter: NoteAdapter
-
 
 
     override fun onCreateView(
@@ -61,22 +61,27 @@ class MainLetterFragment : Fragment(R.layout.fragment_main_letter), SearchView.O
 
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun setupHomeRecyclerView(){
         noteAdapter = NoteAdapter()
         binding.homeRecyclerView.apply {
-            layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
-                setHasFixedSize(true)
-                adapter= noteAdapter
-
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            setHasFixedSize(true)
+            adapter = noteAdapter
         }
+   noteAdapter.setOnItemClickListener { note ->
+            val direction = MainLetterFragmentDirections.actionHomeFragmentToEditNoteFragment(note)
+             findNavController().navigate(direction)
+          }
+     activity?.let {
+         notesViewModel.getAllNotes().observe(viewLifecycleOwner) { noteList ->
+             noteAdapter.differ.submitList(noteList)
+             updateUI(noteList)
+         }
+     }
 
-        activity?.let {
-            notesViewModel.getAllNotes().observe(viewLifecycleOwner){
-                note ->
-                    noteAdapter.differ.submitList(note)
-                    updateUI(note)
-            }
-        }
+
+
     }
 
     private fun searchNote(query: String?){

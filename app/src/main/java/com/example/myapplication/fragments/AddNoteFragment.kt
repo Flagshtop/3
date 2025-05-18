@@ -19,6 +19,55 @@ import com.example.myapplication.viewmodel.NoteViewModel
 import com.example.myapplication.databinding.FragmentAddNoteBinding
 import com.example.myapplication.model.Note
 
+
+class AddNoteFragment : Fragment() {
+
+    private var addNoteBinding: FragmentAddNoteBinding? = null
+    private val binding get() = addNoteBinding!!
+
+    private lateinit var notesViewModel: NoteViewModel
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        addNoteBinding = FragmentAddNoteBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        notesViewModel = (activity as MainActivity).noteViewModel
+
+        // Обработка нажатия кнопки (например, FloatingActionButton)
+        binding.fabSave.setOnClickListener {
+            saveNote()
+        }
+    }
+
+    private fun saveNote() {
+        val noteTitle = binding.addNoteTitle.text.toString().trim()
+        val noteDesc = binding.addNoteDesc.text.toString().trim()
+
+        if (noteTitle.isNotEmpty()) {
+            val note = Note(0, noteTitle, noteDesc)
+            notesViewModel.addNote(note)
+
+            Toast.makeText(requireContext(), "Note Saved", Toast.LENGTH_SHORT).show()
+            requireView().findNavController().popBackStack(R.id.LettersFragment, false)
+        } else {
+            Toast.makeText(requireContext(), "Please enter title", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        addNoteBinding = null
+    }
+}
+
+/*
 class AddNoteFragment : Fragment(R.layout.fragment_add_note),MenuProvider {
 
     private var addNoteBinding: FragmentAddNoteBinding? = null
@@ -31,11 +80,14 @@ class AddNoteFragment : Fragment(R.layout.fragment_add_note),MenuProvider {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         addNoteBinding = FragmentAddNoteBinding.inflate(inflater, container, false)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+
         super.onViewCreated(view, savedInstanceState)
 
         val menuHost: MenuHost = requireActivity()
@@ -84,3 +136,4 @@ class AddNoteFragment : Fragment(R.layout.fragment_add_note),MenuProvider {
         addNoteBinding = null
     }
 }
+*/

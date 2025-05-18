@@ -23,21 +23,22 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
+
+        setupViewModel()
+
         setContentView(R.layout.activity_main)
         // ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
         //   val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
         //  v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
         //  insets
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        //val toolbar = findViewById<Toolbar>(R.id.toolbar)
+      //  setSupportActionBar(toolbar)
 
-
-        setupViewModel()
 
         bottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        bottomNavigationView.setOnItemReselectedListener { menuItem ->
+        bottomNavigationView.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.bottom_home -> {
                     replaceFragment(HomeFragment())
