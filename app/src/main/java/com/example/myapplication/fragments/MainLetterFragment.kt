@@ -10,9 +10,11 @@ import android.view.MenuItem
 import android.widget.SearchView
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import com.example.myapplication.MainActivity
 import com.example.myapplication.R
@@ -22,6 +24,7 @@ import com.example.myapplication.viewmodel.NoteViewModel
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.myapplication.model.Note
+import kotlinx.coroutines.launch
 
 class MainLetterFragment : Fragment(R.layout.fragment_main_letter), SearchView.OnQueryTextListener, MenuProvider {
     private var HomeBinding: FragmentMainLetterBinding?= null
@@ -69,20 +72,40 @@ class MainLetterFragment : Fragment(R.layout.fragment_main_letter), SearchView.O
             setHasFixedSize(true)
             adapter = noteAdapter
         }
-   noteAdapter.setOnItemClickListener { note ->
+
+        noteAdapter.setOnItemClickListener { note ->
             val direction = MainLetterFragmentDirections.actionHomeFragmentToEditNoteFragment(note)
-             findNavController().navigate(direction)
-          }
-     activity?.let {
-         notesViewModel.getAllNotes().observe(viewLifecycleOwner) { noteList ->
-             noteAdapter.differ.submitList(noteList)
-             updateUI(noteList)
-         }
-     }
+            findNavController().navigate(direction)
+        }
 
+        noteAdapter.setOnItemLongClickListener { note, view ->
+            showPopupMenu(note, view)
+        }
 
-
+        activity?.let {
+            notesViewModel.getAllNotes().observe(viewLifecycleOwner) { noteList ->
+                noteAdapter.differ.submitList(noteList)
+                updateUI(noteList)
+            }
+        }
     }
+
+    private fun showPopupMenu(note: Note, view: View) {
+        val popup = PopupMenu(requireContext(), view)
+        popup.menuInflater.inflate(R.menu.menu_edit_note, popup.menu)
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.deleteMenu -> {
+                    notesViewModel.deleteNote(note)
+                    true
+                }
+                else -> false
+            }
+        }
+
+        popup.show()
+    }
+
 
     private fun searchNote(query: String?){
         val searchQuery = "%$query"
@@ -121,6 +144,5 @@ class MainLetterFragment : Fragment(R.layout.fragment_main_letter), SearchView.O
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return false
     }
-
 
 }

@@ -1,6 +1,7 @@
 package com.example.myapplication.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -12,7 +13,7 @@ import com.example.myapplication.fragments.MainLetterFragmentDirections
 import com.example.myapplication.model.Note
 
 class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>(){
-    class NoteViewHolder(val itemBinding: NoteLayoutBinding): RecyclerView.ViewHolder(itemBinding.root)
+//    class NoteViewHolder(val itemBinding: NoteLayoutBinding): RecyclerView.ViewHolder(itemBinding.root)
 
     private val differentCallback = object: DiffUtil.ItemCallback<Note>(){
         override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
@@ -28,7 +29,10 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>(){
     val differ = AsyncListDiffer(this, differentCallback)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         return NoteViewHolder(
-            NoteLayoutBinding.inflate(LayoutInflater.from(parent.context),parent, false)
+            NoteLayoutBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent, false
+            )
         )
     }
 
@@ -40,16 +44,46 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>(){
     fun setOnItemClickListener(listener: (Note) -> Unit) {
         onItemClickListener = listener
     }
+
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
          val currentNote = differ.currentList[position]
-        holder.itemView.setOnClickListener {
-            onItemClickListener?.invoke(currentNote)
-        }
-        holder.itemBinding.noteTitle.text = currentNote.noteTittle
-        holder.itemBinding.noteDesc.text = currentNote.noteDesc
+        holder.bind(currentNote)
+//        holder.itemView.setOnClickListener {
+//            onItemClickListener?.invoke(currentNote)
+//        }
+//        holder.itemBinding.noteTitle.text = currentNote.noteTittle
+//        holder.itemBinding.noteDesc.text = currentNote.noteDesc
+//
+//        holder.itemView.setOnClickListener{
+//          val direction = MainLetterFragmentDirections.actionHomeFragmentToEditNoteFragment(currentNote)
+//        }
+    }
 
-        holder.itemView.setOnClickListener{
-          val direction = MainLetterFragmentDirections.actionHomeFragmentToEditNoteFragment(currentNote)
+    private var onItemLongClickListener: ((Note, View) -> Unit)? = null
+
+    fun setOnItemLongClickListener(listener: (Note, View) -> Unit) {
+        onItemLongClickListener = listener
+    }
+
+    inner class NoteViewHolder(val itemBinding: NoteLayoutBinding) : RecyclerView.ViewHolder(itemBinding.root) {
+        // ... существующий код ...
+
+        fun bind(note: Note) {
+            // ... существующий код привязки данных ...
+            itemBinding.apply {
+                noteTitle.text = note.noteTittle
+                noteDesc.text = note.noteDesc
+            }
+
+            itemView.setOnClickListener {
+                onItemClickListener?.invoke(note)
+            }
+
+            itemView.setOnLongClickListener { view ->
+                onItemLongClickListener?.invoke(note, view)
+                true
+            }
         }
     }
+
 }
